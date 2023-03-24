@@ -1,0 +1,311 @@
+#: import MapView kivy_garden.mapview.MapView
+
+AppScreenManager:
+    StartScreen:
+    MapScreen:
+    SettingsScreen:
+
+<StartScreen>:
+    name: "StartScreen"
+    BoxLayout:
+        orientation: "vertical"
+
+        BoxLayout:
+            size_hint : 1, 0.1
+
+        Image:
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            source: "./icons/appicon.png"
+            size: 50,50
+            size_hint : 1, 0.6
+        
+        BoxLayout:
+            size_hint : 1, 0.1
+
+        BoxLayout:
+            size_hint : 1, 0.1
+            padding: [200, 0]
+
+            Button:
+                id: startApp
+                text: "Start"
+                color: (0, 0, 0, 1)
+                background_color: (10, 10, 10, 1)
+                on_press:
+                    root.manager.get_screen("mapScreen").moveAnchor("up")
+                    #root.manager.get_screen("mapScreen").ids.map.center_on(root.manager.get_screen("mapScreen").latitude_anchor,root.manager.get_screen("mapScreen").longitude_anchor)
+                    #root.manager.get_screen("mapScreen").start(5000,0)
+                    root.manager.transition.direction = 'left'
+                    app.root.current = "mapScreen"
+        
+        BoxLayout:
+            size_hint : 1, 0.1
+    
+
+<MapScreen>:
+    name: "mapScreen"
+    
+    spacing: 20
+	
+	BoxLayout:
+        orientation: "vertical"
+        MapView: 
+            id: map
+            zoom: 17
+            lat: root.latitude_anchor
+            lon: root.longitude_anchor
+            size_hint : 1, 0.6
+     
+ 
+       
+        GridLayout:
+		
+            size_hint: 1, 0.3
+            cols: 2
+            rows: 1
+            spacing: 20
+
+            GridLayout:
+			    
+                cols: 3
+                rows: 3
+
+                canvas.before:
+                    Line:    # --- adds a border --- #
+                        width: 2
+                        rectangle: self.x, self.y, self.width, self.height
+      
+
+                Label:
+                    canvas.before:
+                        Line:    # --- adds a border --- #
+                            width: 2
+                            rectangle: self.x, self.y, self.width, self.height
+
+                Button:
+                    id: naviagtionButtonUp
+                    on_press: root.moveAnchor('up'),map.center_on(root.latitude_anchor,root.longitude_anchor)
+                    padding: [10,10]
+                    Image:
+                        center_x: self.parent.center_x
+                        center_y: self.parent.center_y
+                        source: "./icons/arrow_up.png"
+                        size: 50,50
+                Label:
+                
+                    canvas.before:
+                        Line:    # --- adds a border --- #
+                            width: 2
+                            rectangle: self.x, self.y, self.width, self.height
+                Button:
+                    id: naviagtionButtonLeft
+                    on_press: root.moveAnchor('left'),map.center_on(root.latitude_anchor,root.longitude_anchor)
+                    Image:
+                        source: "./icons/arrow_left.png"
+                        center_x: self.parent.center_x
+                        center_y: self.parent.center_y
+                        size: 50,50
+                Label:
+                    text: 'Pos'
+                    canvas.before:
+                        Line:    # --- adds a border --- #
+                            width: 2
+                            rectangle: self.x, self.y, self.width, self.height
+                Button:
+                    id: naviagtionButtonRight
+                    on_press: root.moveAnchor('right'),map.center_on(root.latitude_anchor,root.longitude_anchor)
+                    Image:
+                        source: "./icons/arrow_right.png"
+                        center_x: self.parent.center_x
+                        center_y: self.parent.center_y
+                        size: 50,50
+                Label:
+                    canvas.before:
+                        Line:    # --- adds a border --- #
+                            width: 2
+                            rectangle: self.x, self.y, self.width, self.height
+                Button:
+                    id: naviagtionButtonDown
+                    on_press: root.moveAnchor('down'),map.center_on(root.latitude_anchor,root.longitude_anchor)
+                    Image:
+                        source: "./icons/arrow_down.png"
+                        center_x: self.parent.center_x
+                        center_y: self.parent.center_y
+                        size: 50,50
+                Label:
+                    canvas.before:
+                        Line:    # --- adds a border --- #
+                            width: 2
+                            rectangle: self.x, self.y, self.width, self.height
+        
+            GridLayout:
+			  
+                cols: 1
+                rows: 3
+
+                canvas.before:
+                    Line:    # --- adds a border --- #
+                        width: 2
+                        rectangle: self.x, self.y, self.width, self.height
+
+                Label:
+                    text: 'Radius'
+                    canvas.before:
+                        Line:    # --- adds a border --- #
+                            width: 2
+                            rectangle: self.x, self.y, self.width, self.height
+                Label:
+                    text: root.radius
+                    canvas.before:
+                        Line:    # --- adds a border --- #
+                            width: 2
+                            rectangle: self.x, self.y, self.width, self.height
+                GridLayout:
+				    
+                    cols: 2
+                    rows: 1
+                    Button:
+                        id: radiusButtonLeft
+                        on_press: root.subRadius()
+
+                        Image:
+                            source: "./icons/arrow_left.png"
+                            center_x: self.parent.center_x
+                            center_y: self.parent.center_y
+                            size: 50,50
+                        
+                    Button:
+                        id: radiusButtonRight
+                        on_press: root.addRadius()
+
+                        Image:
+                            source: "./icons/arrow_right.png"
+                            center_x: self.parent.center_x
+                            center_y: self.parent.center_y
+                            size: 50,50
+                        
+
+        GridLayout:
+            size_hint: 1, 0.1 
+            cols: 3
+            rows: 1
+            Button:  
+                id: mapPlayButton     
+                size_hint_x: 0.2
+                background_color: 1, 255, 0, 0.8
+                on_press:
+                    root.generateNewBoat()
+                    app.toggle_play_button_press()
+                    root.start(5000, 0)
+                Image:
+                    id: mapPlayButtonImage
+                    source: "./icons/play-button-arrowhead.png"
+                    center_x: self.parent.center_x
+                    center_y: self.parent.center_y
+                    size: 40,40
+            Button:
+                size_hint_x: 0.4
+                id: mapButton
+                background_color: 0, 200, 200, 0.8
+                Image:
+                    source: "./icons/map.png"
+                    center_x: self.parent.center_x
+                    center_y: self.parent.center_y
+                    size: 50,50
+            Button:
+                size_hint_x: 0.4
+                id: settingsButton
+                background_color: 200, 200, 200, 0.5
+				on_press: 
+				    root.manager.transition.direction = 'left'
+                    root.refreshVariables()
+				    app.root.current = "settingsScreen"
+                Image:
+                    source: "./icons/settings.png"
+                    center_x: self.parent.center_x
+                    center_y: self.parent.center_y
+                    size: 50,50
+            
+<SettingsScreen>:
+	name: 'settingsScreen'
+    BoxLayout:
+	    orientation: "vertical"
+		background_color: 255,255,255,1
+		BoxLayout:
+		    size_hint: 1, 0.1
+		    Label:
+                text: 'Übersicht'
+			   
+        GridLayout:
+	        rows: 3
+		    cols: 1
+			size_hint: 1, 0.5
+			spacing: [0,0]
+			BoxLayout:
+		
+			    orientation: "horizontal"
+			    Label:
+                    text: 'Längengrad:'
+				
+		        Label:
+                    id: settingsLon
+                    text: str(root.manager.get_screen("mapScreen").longitude_boat)
+			
+			BoxLayout:
+			    
+			    orientation: "horizontal"
+		        Label:
+                    text: 'Breitengrad:'
+		        Label:
+                    id: settingsLat
+                    text: str(root.manager.get_screen("mapScreen").latitude_boat)
+				
+			BoxLayout:
+			    
+			    orientation: "horizontal"
+			    Label:
+                    text: 'Radius:'
+		        Label:
+                    id: settingsRadius
+                    text: str(root.manager.get_screen("mapScreen").radius)
+					
+	    BoxLayout:
+		    size_hint: 1, 0.3
+					
+        GridLayout:
+            size_hint: 1, 0.1 
+            cols: 3
+            rows: 1
+            Button:   
+                id: settingsPlayButton    
+                size_hint_x: 0.2
+                background_color: 1, 255, 0, 0.8
+                Image:
+                    id: settingsPlayButtonImage
+                    source: "./icons/play-button-arrowhead.png"
+                    center_x: self.parent.center_x
+                    center_y: self.parent.center_y
+                    size: 40,40
+            Button:
+                size_hint_x: 0.4
+                id: mapButton
+                background_color: 200, 200, 200, 0.5
+                on_press: 
+				    root.manager.transition.direction = 'right'
+				    app.root.current = "mapScreen"
+                Image:
+                    source: "./icons/map.png"
+                    center_x: self.parent.center_x
+                    center_y: self.parent.center_y
+                    size: 50,50
+            Button:
+                size_hint_x: 0.4
+                id: settingsButton
+                background_color: 0, 200, 200, 0.8
+                Image:
+                    source: "./icons/settings.png"
+                    center_x: self.parent.center_x
+                    center_y: self.parent.center_y
+                    size: 50,50
+	    

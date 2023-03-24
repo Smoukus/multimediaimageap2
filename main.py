@@ -8,7 +8,7 @@ from kivy.uix.button import Button
 from kivy.core.audio import SoundLoader
 from kivy.clock import Clock
 from plyer import gps, notification
-#from android.permissions import Permission, request_permissions
+from android.permissions import Permission, request_permissions
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.lang import Builder
